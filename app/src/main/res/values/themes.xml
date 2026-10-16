@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- DarkActionBar gives both activities an ActionBar (needed for the About menu
+         item and the back arrow). The Compose screens draw below it. -->
+    <style name="Theme.PayrollCalculator" parent="android:Theme.Material.Light.DarkActionBar">
+        <item name="android:colorPrimary">@color/action_bar</item>
+        <item name="android:colorAccent">@color/action_bar</item>
+    </style>
+</resources>

@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Payroll Calculator</string>
+
+    <!-- MainActivity -->
+    <string name="main_heading">Calculate your pay</string>
+    <string name="label_hours">Number of hours worked</string>
+    <string name="label_rate">Hourly rate ($)</string>
+    <string name="label_tax_rate">Tax rate</string>
+    <string name="hint_tax_rate">Enter as a decimal, e.g. 0.13 for 13%</string>
+    <string name="button_calculate">Calculate</string>
+    <string name="button_clear">Clear</string>
+    <string name="results_heading">Results</string>
+    <string name="label_pay">Pay</string>
+    <string name="label_overtime_pay">Overtime pay</string>
+    <string name="label_total_pay">Total pay</string>
+    <string name="label_tax">Tax</string>
+    <string name="error_required">Please enter a number</string>
+    <string name="error_negative">Value cannot be negative</string>
+    <string name="error_tax_range">Enter a decimal between 0 and 1 (e.g. 0.13)</string>
+    <string name="menu_about">About</string>
+
+    <!-- AboutActivity -->
+    <string name="about_title">About</string>
+    <string name="about_name_label">Full name</string>
+    <string name="about_id_label">Student ID</string>
+    <string name="about_course">COMP3074 - Assignment 1</string>
+    <!-- Full name as per college record and student ID -->
+    <string name="student_full_name" translatable="false">Jezrel Dela Cruz</string>
+    <string name="student_id" translatable="false">101549617</string>
+</resources>
