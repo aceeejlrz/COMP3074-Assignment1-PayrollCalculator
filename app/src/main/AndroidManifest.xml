@@ -12,8 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PayrollCalculator">
 
-        <!-- singleTop: if MainActivity is already on top of the stack it is reused,
-             never created again. -->
+        <!-- singleTop: backup for the system's Up navigation. When Up clears the
+             activities above MainActivity, the existing MainActivity gets onNewIntent()
+             instead of being destroyed and recreated. (AboutActivity's back arrow
+             calls finish(), so this path is not normally used.) -->
         <activity
             android:name=".MainActivity"
             android:exported="true"

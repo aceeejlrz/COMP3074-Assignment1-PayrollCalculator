@@ -6,7 +6,7 @@ An Android app that calculates pay, overtime pay, total pay and tax from the hou
 |---|---|
 | **Student** | Jezrel Dela Cruz |
 | **Student ID** | 101549617 |
-| **Course** | COMP3074 – Mobile Application Development I |
+| **Course** | COMP3074 (Fall 2026) |
 | **Language / UI** | Kotlin, Jetpack Compose (Material 3) |
 | **Min / Target SDK** | 25 (Android 7.1) / 37 |
 
@@ -167,9 +167,14 @@ After tapping About:   [ MainActivity, AboutActivity ]   ← MainActivity is sto
 After tapping ←:       [ MainActivity ]                  ← same object, resumed
 ```
 
-- **`finish()`** removes AboutActivity from the top of the stack. Android then shows the MainActivity that is already underneath. No `Intent` to MainActivity is sent, so no new instance can be created. Because it is the same instance, the typed values and results are still on screen.
-- **`android:parentActivityName=".MainActivity"`** (manifest) tells Android that MainActivity is the logical parent of AboutActivity.
-- **`android:launchMode="singleTop"`** (manifest) is a safety net. If the system's own "Up" handling ever sends an intent to MainActivity while it is on top, Android reuses the existing instance instead of making a new one.
+**What actually runs:** `finish()`.
+- `finish()` removes AboutActivity from the top of the stack. Android then shows the MainActivity that is already underneath.
+- No `Intent` to MainActivity is sent, so no new instance can be created.
+- Because it is the same instance, the typed values and results are still on screen.
+
+**Backup only (never used in this app because `finish()` handles the arrow):**
+- **`android:parentActivityName=".MainActivity"`** (manifest) tells Android that MainActivity is the logical parent of AboutActivity. If `onOptionsItemSelected` did *not* handle the arrow, Android's own Up handling would use this. It closes every activity above MainActivity and then sends MainActivity an intent.
+- **`android:launchMode="singleTop"`** (manifest) decides what happens to that intent. With the default (`standard`) launch mode, Android would **destroy MainActivity and create a new one**. With `singleTop`, the existing MainActivity receives the intent in `onNewIntent()` and is kept.
 
 The phone's hardware/gesture **Back** works the same way: it also finishes AboutActivity.
 
@@ -278,7 +283,7 @@ The APK is created at `app/build/outputs/apk/debug/app-debug.apk`.
 `onCreateOptionsMenu` inflates `main_menu.xml` into the ActionBar. When the item is tapped, `onOptionsItemSelected` checks `R.id.action_about` and calls `startActivity(Intent(this, AboutActivity::class.java))`.
 
 **How does the back arrow work, and why is no new MainActivity created?**
-`setDisplayHomeAsUpEnabled(true)` shows the arrow. Its id is `android.R.id.home`. On tap, `finish()` closes AboutActivity, and Android shows the MainActivity that was already in the back stack. No intent to MainActivity is sent. `singleTop` in the manifest is an extra safety net.
+`setDisplayHomeAsUpEnabled(true)` shows the arrow. Its id is `android.R.id.home`. On tap, `finish()` closes AboutActivity, and Android shows the MainActivity that was already in the back stack. No intent to MainActivity is sent. `parentActivityName` + `singleTop` in the manifest are only a backup: if Android's own Up handling were used instead, `singleTop` makes it reuse the existing MainActivity (`onNewIntent()`) instead of destroying and recreating it.
 
 **How do you read the input safely?**
 `toDoubleOrNull()` returns `null` instead of throwing an exception. Each field is checked (number, not negative, tax rate between 0 and 1), and errors are shown under the field.
