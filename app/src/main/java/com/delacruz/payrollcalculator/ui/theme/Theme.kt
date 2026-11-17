@@ -36,8 +36,7 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun PayrollCalculatorTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+. Turned off so the screens always
-    // use the same purple as the ActionBar (see res/values/themes.xml).
+    // Off so screens match the ActionBar purple.
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {

@@ -26,8 +26,6 @@ class AboutActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Shows the back (Up) arrow in the ActionBar.
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
         setContent {
@@ -39,11 +37,9 @@ class AboutActivity : ComponentActivity() {
         }
     }
 
-    // Called when the back arrow in the ActionBar is tapped.
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            // finish() closes this screen and returns to the MainActivity that is
-            // already on the back stack, so no new MainActivity is created.
+            // Return to the existing MainActivity instead of recreating it.
             finish()
             return true
         }

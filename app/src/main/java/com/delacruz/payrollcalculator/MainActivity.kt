@@ -60,13 +60,11 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    // Adds the "About" item to the ActionBar (res/menu/main_menu.xml).
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
         return true
     }
 
-    // Opens AboutActivity when the "About" item is tapped.
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_about) {
             startActivity(Intent(this, AboutActivity::class.java))
@@ -76,7 +74,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-// Lets the result survive screen rotation (rememberSaveable can only store simple types).
+// Keeps the result across rotation.
 private val PayResultSaver = listSaver<PayResult?, Double>(
     save = { result ->
         if (result == null) emptyList()
@@ -90,17 +88,14 @@ private val PayResultSaver = listSaver<PayResult?, Double>(
 
 @Composable
 fun PayrollScreen() {
-    // ----- Input state (what the user typed) -----
     var hoursText by rememberSaveable { mutableStateOf("") }
     var rateText by rememberSaveable { mutableStateOf("") }
     var taxRateText by rememberSaveable { mutableStateOf("") }
 
-    // ----- Error messages (null = no error) -----
     var hoursError by rememberSaveable { mutableStateOf<String?>(null) }
     var rateError by rememberSaveable { mutableStateOf<String?>(null) }
     var taxRateError by rememberSaveable { mutableStateOf<String?>(null) }
 
-    // ----- Output state (null = nothing calculated yet) -----
     var result by rememberSaveable(stateSaver = PayResultSaver) { mutableStateOf(null) }
 
     val focusManager = LocalFocusManager.current
@@ -110,12 +105,10 @@ fun PayrollScreen() {
     val errorTaxRange = stringResource(R.string.error_tax_range)
 
     fun calculate() {
-        // 1. Read the input. toDoubleOrNull() returns null instead of crashing on bad text.
         val hours = hoursText.trim().toDoubleOrNull()
         val rate = rateText.trim().toDoubleOrNull()
         val taxRate = taxRateText.trim().toDoubleOrNull()
 
-        // 2. Validate each field and remember the error to show under it.
         hoursError = when {
             hours == null || !hours.isFinite() -> errorRequired
             hours < 0 -> errorNegative
@@ -132,12 +125,11 @@ fun PayrollScreen() {
             else -> null
         }
 
-        // 3. Only calculate when all three inputs are valid.
         if (hours != null && rate != null && taxRate != null &&
             hoursError == null && rateError == null && taxRateError == null
         ) {
             result = PayrollCalculator.calculate(hours, rate, taxRate)
-            focusManager.clearFocus() // hides the keyboard so the results are visible
+            focusManager.clearFocus()
         } else {
             result = null
         }
@@ -157,7 +149,6 @@ fun PayrollScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            // keeps content away from the navigation bar and the keyboard
             .windowInsetsPadding(WindowInsets.safeDrawing)
             .verticalScroll(rememberScrollState())
             .padding(16.dp),
@@ -215,7 +206,6 @@ private fun NumberField(
     hint: String? = null,
     onDone: () -> Unit = {}
 ) {
-    // shows the error if there is one, otherwise the optional hint
     val message = error ?: hint
 
     OutlinedTextField(
@@ -230,7 +220,7 @@ private fun NumberField(
             null
         },
         keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Decimal, // number keyboard with a decimal point
+            keyboardType = KeyboardType.Decimal,
             imeAction = imeAction
         ),
         keyboardActions = KeyboardActions(onDone = { onDone() }),
@@ -270,7 +260,6 @@ private fun ResultRow(label: String, amount: Double, bold: Boolean = false) {
     }
 }
 
-// Formats a number as Canadian dollars with 2 decimals, e.g. 1234.5 -> "$1,234.50".
 fun formatMoney(amount: Double): String =
     NumberFormat.getCurrencyInstance(Locale.CANADA).format(amount)
 
